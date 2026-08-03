@@ -20,9 +20,7 @@ import requests
 # Configuration — add/remove locations here. No API key needed.
 # ---------------------------------------------------------------------------
 LOCATIONS = {
-    "Klerksdorp": {"latitude": -26.8521, "longitude": 26.6667},
-    # "Cape Town": {"latitude": -33.9249, "longitude": 18.4241},
-    # "Johannesburg": {"latitude": -26.2041, "longitude": 28.0473},
+    "MyCity": {"latitude": 0.0, "longitude": 0.0},  # replace with your coordinates
 }
 
 DATA_DIR = Path(__file__).parent / "data"

@@ -1,2 +1,0 @@
-date,time_utc,location,temperature_c,feels_like_c,humidity_pct,wind_speed_kmh,precipitation_mm,day_min_c,day_max_c,conditions
-2026-08-03,18:53:37,MyCity,24.5,26.6,79,14.1,0.0,23.8,24.8,Partly cloudy

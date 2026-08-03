@@ -17,10 +17,10 @@ from pathlib import Path
 import requests
 
 # ---------------------------------------------------------------------------
-# Configuration — add/remove locations here. No API key needed.
+# Configuration
 # ---------------------------------------------------------------------------
 LOCATIONS = {
-    "MyCity": {"latitude": 0.0, "longitude": 0.0},  # replace with your coordinates
+    "Lichtenburg, North West": {"latitude": -26.152, "longitude": 26.160}, 
 }
 
 DATA_DIR = Path(__file__).parent / "data"

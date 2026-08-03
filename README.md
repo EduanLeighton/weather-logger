@@ -1,64 +1,79 @@
 # Daily Weather Logger
 
-A small, fully-automated pipeline that fetches live weather stats every day
-and commits them straight into this repository — no server, no database,
-no manual steps.
+An automated data pipeline that collects daily weather statistics from a
+public API, logs them over time, and generates a next-day temperature
+forecast using a self-scoring machine learning model — all running
+entirely on GitHub Actions with no external server or database.
 
-![Daily weather log](https://github.com/<your-username>/<your-repo>/actions/workflows/daily-weather.yml/badge.svg)
+![Workflow status](https://github.com/<username>/<repo>/actions/workflows/daily-weather.yml/badge.svg)
 
-## How it works
+## Overview
+
+The pipeline runs on a daily schedule and performs four steps:
+
+1. **Collect** — fetch current and daily weather statistics from the
+   [Open-Meteo](https://open-meteo.com/) API (no authentication required).
+2. **Forecast** — train a scikit-learn regression model on the accumulated
+   history and predict the next day's temperature.
+3. **Evaluate** — score the previous day's prediction against the actual
+   outcome, building a running accuracy log.
+4. **Publish** — regenerate summary charts and commit the updated data
+   back to the repository.
+
+No server, database, or manual intervention is required — the entire
+pipeline runs on GitHub's hosted infrastructure via a scheduled Actions
+workflow.
+
+## Architecture
 
 ```
-GitHub Actions (cron, daily)
+GitHub Actions (scheduled, daily)
         │
         ▼
-weather_logger.py  ──►  Open-Meteo API (free, no key needed)
+weather_logger.py        → Open-Meteo API
         │
         ▼
-data/weather_history.csv   (one row appended per day)
+data/weather_history.csv
         │
         ▼
-predict_temperature.py  ──►  scores yesterday's forecast,
-        │                    trains a fresh model, predicts tomorrow
+predict_temperature.py   → scores prior prediction, trains model, forecasts next day
+        │
         ▼
 data/predictions.csv
         │
         ▼
-generate_chart.py  ──►  chart.png + predictions.png (regenerated each run)
+generate_chart.py        → chart.png, predictions.png
         │
         ▼
-git commit + push  (back into this repo)
+Commit + push
 ```
 
-Everything runs on GitHub's own infrastructure via a scheduled
-[GitHub Actions](.github/workflows/daily-weather.yml) workflow — there's
-nothing to host or keep running locally.
+## Features
+
+- **Zero-infrastructure automation** — scheduled via GitHub Actions using
+  the built-in `GITHUB_TOKEN`; no secrets, servers, or third-party hosting.
+- **Historical logging** — structured CSV data, one row appended per day.
+- **Self-scoring forecast model** — a lightweight regression model using
+  seasonal (day-of-year) and lag-based features, retrained daily on the
+  growing dataset; accuracy (mean absolute error) is tracked over time.
+- **Automatic visualization** — trend and prediction-accuracy charts are
+  regenerated and committed on every run.
 
 ## Temperature trend
 
 ![Temperature trend](chart.png)
 
-*(Updates automatically once the workflow has run a few times.)*
-
-## Next-day forecast
-
-Alongside logging, the project trains a small scikit-learn model
-(`predict_temperature.py`) on its own accumulated history — seasonality
-(day of year) plus recent-day lag features — to predict tomorrow's
-temperature. Each day it also scores *yesterday's* prediction against
-what actually happened, so `data/predictions.csv` becomes a running,
-self-graded forecast log.
+## Forecast accuracy
 
 ![Predicted vs actual temperature](predictions.png)
 
-It needs at least 10 days of logged history per location before it starts
-predicting, so this chart appears empty at first and fills in as the
-dataset grows — accuracy (mean absolute error) is printed by
-`generate_chart.py` each run and improves as the training set does.
+The model requires a minimum of 10 days of logged history before
+generating its first forecast. Mean absolute error is printed on each
+run and is expected to improve as the training set grows.
 
-## Data collected
+## Data schema
 
-Each day's row in `data/weather_history.csv` includes:
+`data/weather_history.csv`:
 
 | Field | Description |
 |---|---|
@@ -67,30 +82,43 @@ Each day's row in `data/weather_history.csv` includes:
 | `humidity_pct` | Relative humidity |
 | `wind_speed_kmh` | Wind speed |
 | `precipitation_mm` | Precipitation |
-| `day_min_c` / `day_max_c` | Day's forecast min/max |
-| `conditions` | Human-readable weather description |
+| `day_min_c` / `day_max_c` | Forecast daily min/max |
+| `conditions` | Weather description |
 
-## Running it yourself
+`data/predictions.csv`:
+
+| Field | Description |
+|---|---|
+| `predicted_temp_c` | Forecast temperature for the target date |
+| `actual_temp_c` | Logged temperature once available |
+| `abs_error_c` | Absolute error between forecast and actual |
+
+## Setup
 
 ```bash
-git clone https://github.com/<your-username>/<your-repo>.git
-cd <your-repo>
+git clone https://github.com/<username>/<repo>.git
+cd <repo>
 pip install -r requirements.txt
-python weather_logger.py       # fetch today's stats
-python predict_temperature.py  # score yesterday's forecast, predict tomorrow
-python generate_chart.py       # regenerate chart.png + predictions.png
+python weather_logger.py
+python predict_temperature.py
+python generate_chart.py
 ```
 
-To track your own location(s), edit the `LOCATIONS` dictionary at the top
-of `weather_logger.py`.
+Locations to track are configured in the `LOCATIONS` dictionary at the
+top of `weather_logger.py`.
 
-## Automation
+## Deployment
 
-The workflow in `.github/workflows/daily-weather.yml` runs on a daily cron
-schedule and can also be triggered manually from the **Actions** tab. It
-needs no secrets — it authenticates with the automatically-provided
-`GITHUB_TOKEN`, scoped to `contents: write` for this repo only.
+The workflow defined in `.github/workflows/daily-weather.yml` runs on a
+daily cron schedule and can also be triggered manually from the Actions
+tab. It requires no configuration beyond enabling **read and write
+permissions** for the repository under
+**Settings → Actions → General → Workflow permissions**.
 
 ## Tech stack
 
 Python · Requests · Pandas · Matplotlib · scikit-learn · GitHub Actions · Open-Meteo API
+
+## License
+
+MIT

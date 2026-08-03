@@ -13,6 +13,15 @@ temperatures, running entirely on GitHub Actions.
 - Regenerates summary charts and commits everything back to the
   repository automatically — no server or manual steps required.
 
+## Temperature trend
+
+![Temperature trend](chart.png)
+
+![Predicted vs actual temperature](predictions.png)
+
+*(Charts appear once the workflow has run and generated data — they're
+committed automatically each day.)*
+
 ## Tech stack
 
 Python · Pandas · Matplotlib · scikit-learn · GitHub Actions

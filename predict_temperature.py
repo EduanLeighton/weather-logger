@@ -25,9 +25,7 @@ DATA_DIR = Path(__file__).parent / "data"
 HISTORY_PATH = DATA_DIR / "weather_history.csv"
 PREDICTIONS_PATH = DATA_DIR / "predictions.csv"
 
-# Minimum days of history required per location before a prediction is
-# attempted — below this the model has too little signal to be useful.
-MIN_HISTORY_DAYS = 30
+MIN_HISTORY_DAYS = 10
 
 PREDICTION_FIELDS = [
     "location", "predicted_on", "target_date",

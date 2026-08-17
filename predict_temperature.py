@@ -152,7 +152,7 @@ def predict_next_day(location: str, location_history: pd.DataFrame) -> Optional[
 
     # Separate training data (rows where we know both features and tomorrow's target)
     train = features.dropna(subset=feature_cols + ["target"])
-    if len(train) < 10:
+    if len(train) < 5:
         print(f"{location}: not enough complete feature/target training rows yet.")
         return None
 

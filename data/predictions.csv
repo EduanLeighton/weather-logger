@@ -1,2 +1,2 @@
 location,predicted_on,target_date,predicted_temp_c,actual_temp_c,abs_error_c
-"Lichtenburg, North West",2026-08-17 00:00:00,2026-08-18 00:00:00,8.33,,
+"Lichtenburg, North West",2026-08-17,2026-08-18,8.33,,

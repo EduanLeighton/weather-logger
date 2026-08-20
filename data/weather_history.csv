@@ -23,3 +23,4 @@ date,time_utc,location,temperature_c,feels_like_c,humidity_pct,wind_speed_kmh,pr
 2026-08-18,05:31:07,"Lichtenburg, North West",8.4,4.7,59,11.4,0.0,6.9,25.4,Clear sky
 2026-08-18,23:16:40,"Lichtenburg, North West",11.4,8.0,51,10.7,0.0,8.5,26.2,Clear sky
 2026-08-19,23:17:58,"Lichtenburg, North West",13.6,10.0,47,12.9,0.0,11.0,27.4,Clear sky
+2026-08-20,23:20:29,"Lichtenburg, North West",13.5,10.0,35,7.2,0.0,10.7,26.4,Mainly clear

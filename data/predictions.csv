@@ -59,4 +59,5 @@ location,predicted_on,target_date,predicted_temp_c,actual_temp_c,abs_error_c
 "Lichtenburg, North West",2026-10-14,2026-10-15,16.56,13.6,2.96
 "Lichtenburg, North West",2026-10-15,2026-10-16,15.79,15.2,0.59
 "Lichtenburg, North West",2026-10-16,2026-10-17,15.58,17.3,1.72
-"Lichtenburg, North West",2026-10-17,2026-10-18,16.46,,
+"Lichtenburg, North West",2026-10-17,2026-10-18,16.46,18.8,2.34
+"Lichtenburg, North West",2026-10-18,2026-10-19,17.26,,
